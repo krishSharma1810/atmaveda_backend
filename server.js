@@ -4,6 +4,8 @@ const LangflowClient = require('./langflowClient');
 const config = require('./config');
 const cors = require('cors');
 const app = express();
+const { spawn } = require('child_process');
+
 
 
 app.use(cors({
@@ -194,6 +196,64 @@ app.post('/api/horoscope', async (req, res) => {
         res.status(500).json({ error: 'Internal server error', details: error.message });
     }
 });
+
+
+
+//sudarsh edit
+
+app.post('/generate-kundali', (req, res) => {
+    const { date, time, place, gender, timezone, lagna_file, navamsa_file } = req.body;
+
+    let responseSent = false;
+
+    const pythonProcess = spawn('python', [
+        'generate_kundali.py',
+        date,
+        time,
+        place,
+        gender,
+        timezone,
+        lagna_file || "lagna_chart.svg",
+        navamsa_file || "navamsa_chart.svg"
+    ]);
+
+    let result = '';
+
+    pythonProcess.stdout.on('data', (data) => {
+        result += data.toString(); // Collect the JSON output from Python
+    });
+
+    pythonProcess.stderr.on('data', (data) => {
+        console.error(`Python Error: ${data}`);
+        if (!responseSent) {
+            res.status(500).send(`Error generating Kundali: ${data}`);
+            responseSent = true;
+        }
+    });
+
+    pythonProcess.on('close', (code) => {
+        if (!responseSent) {
+            if (code === 0) {
+                try {
+                    // Parse the JSON output from Python
+                    const analysisResult = JSON.parse(result);
+                    res.status(200).json({
+                        message: "Charts saved successfully.",
+                        analysis: analysisResult
+                    });
+                } catch (error) {
+                    console.error('Error parsing Python output:', error);
+                    res.status(500).send('Failed to parse analysis result.');
+                }
+            } else {
+                res.status(500).send('Failed to generate Kundali charts.');
+            }
+            responseSent = true;
+        }
+    });
+});
+
+
 
 // Start the server
 app.listen(config.PORT, () => {
