@@ -201,7 +201,7 @@ app.post('/api/horoscope', async (req, res) => {
 
 //sudarsh edit
 
-app.post('/generate-kundali', (req, res) => {
+aapp.post('/generate-kundali', (req, res) => {
     const { date, time, place, gender, timezone, lagna_file, navamsa_file } = req.body;
 
     let responseSent = false;
@@ -236,14 +236,22 @@ app.post('/generate-kundali', (req, res) => {
             if (code === 0) {
                 try {
                     // Parse the JSON output from Python
-                    const analysisResult = JSON.parse(result);
+                    const { analysis, lagna_file, navamsa_file } = JSON.parse(result);
+
+                    // Read the SVG files
+                    const lagnaSvg = fs.readFileSync(path.resolve(__dirname, lagna_file), 'utf8');
+                    const navamsaSvg = fs.readFileSync(path.resolve(__dirname, navamsa_file), 'utf8');
+
+                    // Send the response with analysis and SVG files
                     res.status(200).json({
                         message: "Charts saved successfully.",
-                        analysis: analysisResult
+                        analysis: analysis,
+                        lagna_svg: lagnaSvg,
+                        navamsa_svg: navamsaSvg
                     });
                 } catch (error) {
-                    console.error('Error parsing Python output:', error);
-                    res.status(500).send('Failed to parse analysis result.');
+                    console.error('Error parsing Python output or reading SVG files:', error);
+                    res.status(500).send('Failed to process the result.');
                 }
             } else {
                 res.status(500).send('Failed to generate Kundali charts.');
@@ -252,6 +260,7 @@ app.post('/generate-kundali', (req, res) => {
         }
     });
 });
+
 
 
 
