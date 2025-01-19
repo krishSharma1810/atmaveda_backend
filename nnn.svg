@@ -1,0 +1,54 @@
+
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+            <!-- Title Text -->
+            <text x="20" y="30" font-family="Arial" font-size="16" font-weight="bold">Navamsa Chart</text>
+            
+            <!-- Chart -->
+            <g transform="translate(20, 40)">
+                <!-- Outer square -->
+                <rect x="0" y="0" width="360" height="360" fill="none" stroke="red" stroke-width="1"/>
+                
+                <!-- Diagonal lines -->
+                <line x1="0" y1="0" x2="360" y2="360" stroke="red" stroke-width="1"/>
+                <line x1="360" y1="0" x2="0" y2="360" stroke="red" stroke-width="1"/>
+                
+                <!-- Cross lines -->
+                <line x1="0" y1="180" x2="360" y2="180" stroke="red" stroke-width="1"/>
+                <line x1="180" y1="0" x2="180" y2="360" stroke="red" stroke-width="1"/>
+                
+                <!-- Rhombus -->
+                <line x1="180" y1="0" x2="360" y2="180" stroke="red" stroke-width="1"/>
+                <line x1="360" y1="180" x2="180" y2="360" stroke="red" stroke-width="1"/>
+                <line x1="180" y1="360" x2="0" y2="180" stroke="red" stroke-width="1"/>
+                <line x1="0" y1="180" x2="180" y2="0" stroke="red" stroke-width="1"/>
+                
+                <!-- House numbers -->
+                <text x="170" y="30" font-family="Arial" font-size="14" text-anchor="middle">12</text>
+<text x="320" y="30" font-family="Arial" font-size="14" text-anchor="middle">11</text>
+<text x="170" y="330" font-family="Arial" font-size="14" text-anchor="middle">1</text>
+<text x="320" y="330" font-family="Arial" font-size="14" text-anchor="middle">10</text>
+<text x="30" y="30" font-family="Arial" font-size="14" text-anchor="middle">6</text>
+<text x="30" y="330" font-family="Arial" font-size="14" text-anchor="middle">8</text>
+                
+                <!-- Planets -->
+                <circle cx="180" cy="315" r="8" fill="white" fill-opacity="0.7"/>
+<text x="180" y="320" fill="red" font-family="Arial" font-size="14" text-anchor="middle">Su</text>
+<circle cx="320" cy="315" r="8" fill="white" fill-opacity="0.7"/>
+<text x="320" y="320" fill="blue" font-family="Arial" font-size="14" text-anchor="middle">Mo</text>
+<circle cx="345" cy="300" r="8" fill="white" fill-opacity="0.7"/>
+<text x="345" y="305" fill="red" font-family="Arial" font-size="14" text-anchor="middle">Sa</text>
+<circle cx="320" cy="175" r="8" fill="white" fill-opacity="0.7"/>
+<text x="320" y="180" fill="green" font-family="Arial" font-size="14" text-anchor="middle">Ma</text>
+<circle cx="180" cy="35" r="8" fill="white" fill-opacity="0.7"/>
+<text x="180" y="40" fill="blue" font-family="Arial" font-size="14" text-anchor="middle">Me</text>
+<circle cx="205" cy="50" r="8" fill="white" fill-opacity="0.7"/>
+<text x="205" y="55" fill="purple" font-family="Arial" font-size="14" text-anchor="middle">Ju</text>
+<circle cx="40" cy="315" r="8" fill="white" fill-opacity="0.7"/>
+<text x="40" y="320" fill="green" font-family="Arial" font-size="14" text-anchor="middle">Ve</text>
+<circle cx="180" cy="35" r="8" fill="white" fill-opacity="0.7"/>
+<text x="180" y="40" fill="red" font-family="Arial" font-size="14" text-anchor="middle">Ra</text>
+<circle cx="40" cy="35" r="8" fill="white" fill-opacity="0.7"/>
+<text x="40" y="40" fill="brown" font-family="Arial" font-size="14" text-anchor="middle">Ke</text>
+            </g>
+        </svg>
+        

@@ -1,7 +1,7 @@
 import swisseph as swe
 import datetime
 from typing import Dict, List, Tuple
-
+import re
 class KundaliSVGGenerator:
     def __init__(self, kundli):
         self.kundli = kundli
@@ -159,7 +159,7 @@ class EnhancedKundliGenerator:
         self.time = time  # Format: 'HH:MM'
         self.place = place  # Format: 'City, State, Country'
         self.gender = gender  # 'Male' or 'Female'
-        self.timezone = timezone  # Format: 'UTC±HH:MM'
+        self.timezone = "UTC+05:30"    # Format: 'UTC±HH:MM'
         self.julian_day = None
         self.ascendant = None
         self.planetary_positions = {}
@@ -196,40 +196,49 @@ class EnhancedKundliGenerator:
             "Uttara Bhadrapada", "Revati"
         ]
     
-    
     def calculate_julian_day(self):
         """Convert the given date and time to Julian Day in UT."""
-        date_parts = list(map(int, self.date.split('/')))
-        time_parts = list(map(int, self.time.split(':')))
-        
-        # Parse timezone offset
-        tz_str = self.timezone
-        if tz_str.startswith('UTC'):
-            # Remove 'UTC' prefix
-            tz_str = tz_str[3:]
-            # Split on colon to separate hours and minutes
-            parts = tz_str.split(':')
-            if len(parts) >= 2:
-                sign = parts[0][0]
-                hours = parts[0][1:]
-                minutes = parts[1]
-            else:
-                sign = parts[0][0]
-                hours = parts[0][1:]
-                minutes = '00'
-            tz_hours = int(hours)
-            tz_minutes = int(minutes)
-            tz_offset = (tz_hours + tz_minutes / 60.0) * (-1 if sign == '-' else 1)
-        else:
+        # Parse and validate date
+        try:
+            date_parts = list(map(int, self.date.split('/')))
+        except ValueError:
+            raise ValueError("Date must be in 'DD/MM/YYYY' format.")
+
+        # Parse and validate time
+        try:
+            time_parts = list(map(int, self.time.split(':')))
+        except ValueError:
+            raise ValueError("Time must be in 'HH:MM' format.")
+
+        # Set default timezone if not provided
+        if not self.timezone or not self.timezone.strip():
+            print("No timezone provided. Setting default timezone to IST (UTC+05:30).")
+            self.timezone = "UTC+05:30"
+
+        # Clean and validate timezone
+        tz_str = ''.join(c for c in self.timezone if c.isprintable()).strip()
+        if not tz_str.startswith('UTC') or not re.match(r'^UTC[+-]\d{2}:\d{2}$', tz_str):
             raise ValueError("Timezone must be in 'UTC±HH:MM' format.")
-            
+
+        # Extract offset
+        tz_str = tz_str[3:]  # Remove 'UTC' prefix
+        sign = tz_str[0]
+        hours, minutes = map(int, tz_str[1:].split(':'))
+        tz_offset = (hours + minutes / 60.0) * (-1 if sign == '-' else 1)
+
         # Create datetime object in local time
-        dt = datetime.datetime(date_parts[2], date_parts[1], date_parts[0], 
-                             time_parts[0], time_parts[1])
+        dt = datetime.datetime(date_parts[2], date_parts[1], date_parts[0],
+                            time_parts[0], time_parts[1])
+
         # Convert to UT by subtracting timezone offset
         dt_ut = dt - datetime.timedelta(hours=tz_offset)
-        self.julian_day = swe.julday(dt_ut.year, dt_ut.month, dt_ut.day, 
-                                   dt_ut.hour + dt_ut.minute / 60.0)
+
+        # Calculate Julian Day
+        self.julian_day = swe.julday(dt_ut.year, dt_ut.month, dt_ut.day,
+                                    dt_ut.hour + dt_ut.minute / 60.0)
+
+
+
     def calculate_ascendant(self):
         """Calculate the ascendant (Lagna) based on the place and time."""
         # Get latitude and longitude of the place (you can use a geocoding API for this)
