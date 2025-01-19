@@ -4,6 +4,7 @@ const LangflowClient = require('./langflowClient');
 const config = require('./config');
 const fs = require('fs');
 const cors = require('cors');
+const path = require('path');
 const app = express();
 const { spawn } = require('child_process');
 
