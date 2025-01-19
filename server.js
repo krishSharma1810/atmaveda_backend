@@ -17,9 +17,19 @@ app.use(cors())
 app.use(express.json());
 
 // Initialize LangFlow client
-const langflowClient = new LangflowClient(
+const langflowClient1 = new LangflowClient(
     config.LANGFLOW_BASE_URL,
-    config.APPLICATION_TOKEN
+    config.APPLICATION_TOKEN1
+);
+
+const langflowClient2 = new LangflowClient(
+    config.LANGFLOW_BASE_URL,
+    config.APPLICATION_TOKEN2
+);
+
+const langflowClient3 = new LangflowClient(
+    config.LANGFLOW_BASE_URL,
+    config.APPLICATION_TOKEN3
 );
 
 // Health check endpoint
@@ -41,9 +51,9 @@ app.post('/api/chatbot', async (req, res) => {
             return res.status(400).json({ error: 'Message is required'});
         }
 
-        const response = await langflowClient.runFlow(
-            config.FLOW_ID,
-            config.LANGFLOW_ID,
+        const response = await langflowClient1.runFlow(
+            config.FLOW_ID1,
+            config.LANGFLOW_ID1,
             message,
             inputType,
             outputType,
@@ -99,9 +109,9 @@ app.post('/api/pr', async (req, res) => {
             return res.status(400).json({ error: 'Message is required' });
         }
 
-        const response = await langflowClient.runFlow(
-            config.FLOW_ID,
-            config.LANGFLOW_ID,
+        const response = await langflowClient2.runFlow(
+            config.FLOW_ID2,
+            config.LANGFLOW_ID2,
             message,
             inputType,
             outputType,
@@ -156,9 +166,9 @@ app.post('/api/horoscope', async (req, res) => {
             return res.status(400).json({ error: 'Message is required' });
         }
 
-        const response = await langflowClient.runFlow(
-            config.FLOW_ID,
-            config.LANGFLOW_ID,
+        const response = await langflowClient3.runFlow(
+            config.FLOW_ID3,
+            config.LANGFLOW_ID3,
             message,
             inputType,
             outputType,
