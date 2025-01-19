@@ -236,22 +236,14 @@ app.post('/generate-kundali', (req, res) => {
             if (code === 0) {
                 try {
                     // Parse the JSON output from Python
-                    const { analysis, lagna_file, navamsa_file } = JSON.parse(result);
-
-                    // Read the SVG files
-                    const lagnaSvg = fs.readFileSync(path.resolve(__dirname, lagna_file), 'utf8');
-                    const navamsaSvg = fs.readFileSync(path.resolve(__dirname, navamsa_file), 'utf8');
-
-                    // Send the response with analysis and SVG files
+                    const analysisResult = JSON.parse(result);
                     res.status(200).json({
                         message: "Charts saved successfully.",
-                        analysis: analysis,
-                        lagna_svg: lagnaSvg,
-                        navamsa_svg: navamsaSvg
+                        analysis: analysisResult
                     });
                 } catch (error) {
-                    console.error('Error parsing Python output or reading SVG files:', error);
-                    res.status(500).send('Failed to process the result.');
+                    console.error('Error parsing Python output:', error);
+                    res.status(500).send('Failed to parse analysis result.');
                 }
             } else {
                 res.status(500).send('Failed to generate Kundali charts.');
@@ -260,6 +252,8 @@ app.post('/generate-kundali', (req, res) => {
         }
     });
 });
+
+
 
 // Start the server
 app.listen(config.PORT, () => {
