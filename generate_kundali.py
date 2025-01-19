@@ -10,7 +10,7 @@ def generate_kundali_charts(date: str, time: str, place: str, gender: str, timez
                           navamsa_file: str = "navamsa_chart.svg") -> Dict:
     """
     Generate and save Lagna and Navamsa charts as separate SVG files.
-    Returns the result of kundli.generate_full_analysis() as a dictionary.
+    Returns the analysis result and paths to the generated SVG files.
     """
     kundli = EnhancedKundliGenerator(date, time, place, gender, timezone)
     analysis_result = kundli.generate_full_analysis()  # Capture the analysis result
@@ -18,7 +18,11 @@ def generate_kundali_charts(date: str, time: str, place: str, gender: str, timez
     svg_generator = KundaliSVGGenerator(kundli)
     svg_generator.save_charts(lagna_file, navamsa_file)
 
-    return analysis_result  # Return the analysis result
+    return {
+        "analysis": analysis_result,
+        "lagna_file": lagna_file,
+        "navamsa_file": navamsa_file
+    }
 
 if __name__ == "__main__":
     # Parse command-line arguments
@@ -31,7 +35,7 @@ if __name__ == "__main__":
     navamsa_file = sys.argv[7] if len(sys.argv) > 7 else "navamsa_chart.svg"
 
     # Generate charts and get the analysis result
-    analysis_result = generate_kundali_charts(date, time, place, gender, timezone, lagna_file, navamsa_file)
+    result = generate_kundali_charts(date, time, place, gender, timezone, lagna_file, navamsa_file)
 
-    # Print the analysis result as JSON
-    print(json.dumps(analysis_result))
+    # Print the result as JSON
+    print(json.dumps(result))
