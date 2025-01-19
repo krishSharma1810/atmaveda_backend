@@ -201,7 +201,7 @@ app.post('/api/horoscope', async (req, res) => {
 
 //sudarsh edit
 
-aapp.post('/generate-kundali', (req, res) => {
+app.post('/generate-kundali', (req, res) => {
     const { date, time, place, gender, timezone, lagna_file, navamsa_file } = req.body;
 
     let responseSent = false;
